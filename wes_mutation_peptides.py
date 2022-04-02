@@ -102,25 +102,6 @@ def handle11(sample, reuniprot):
     utils.handle4(sample, reuniprot)
 
 
-# def subSeq_ins(seq_str, pos, pep_len):
-#     """
-#
-#     :param seq_str: original sequence
-#     :param pos: mutation
-#     :param pep_len: peptide lengths
-#     :return: peptides list
-#     """
-#     pep_list = []
-#     for i in range(pep_len - 1):
-#         pep_str = seq_str[pos - (pep_len - i - 2):pos + i + 2]
-#         if len(pep_str) == pep_len:
-#             pep_list.append(pep_str)
-#     pep_str0 = seq_str[pos + 1:pos + pep_len + 1]
-#     if len(pep_str) == pep_len:
-#         pep_list.append(pep_str0)
-#     return pep_list
-
-
 if __name__ == '__main__':
     sys_args = sys.argv
     utils = NeoantigenUtils("outfile1", "outfile-wes")
