@@ -5,3 +5,16 @@ A One-stop software for Neoantigen Prediction and Filtering based on the Proteog
 ![](pipeline.jpg)
 ## Introduction
 ProGeo-neo v2.0 is a one-stop software solution for predicting neoantigens from the paired tumour-normal WGS/WES data in FASTQ format. ProGeo-neo v2.0 provides new features such as in-frame indels, frameshift mutations, and gene fusion analysis. In addition, the new version supports the prediction of MHC class II-restricted neoantigens, i.e. peptides up to 30mer in length. The source of neoantigens has been expanded, allowing more candidate neoantigens to be identified for follow-up studies. In addition, we propose two more efficient screening approaches, mainly using an in-group authentic neoantigen database for neoantigen screening. The range of candidate peptides was effectively narrowed down to those that are more likely to elicit an immune response, providing a more meaningful reference for subsequent experimental validation. Compared to ProGeo-neo, the ProGeo-neo v2.0 performs well on the same data set, and this means that our upgrades are necessary, both in updated functionality and improved accuracy. 
+## Running environment
+ProGeo-neo2.0 requires a Linux operation system(centos6) with Python(V3.7), Perl and Java installed.
+## Usage
+Run the following codes before getting started.
+```
+cd ProGeo-neo2.0
+bash start.sh 
+# Users with root privileges can ignore the following:
+chmod 755 software/bwa/bwa 
+chmod 755 software/samtools/samtools 
+chmod 755 software/bcftools/bcftools
+```
+For detailed operations, please read the User's Manual.
