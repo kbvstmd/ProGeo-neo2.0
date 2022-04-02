@@ -84,7 +84,7 @@ def handle07_fusion():
 
 
 def handle08_HLA_I_pred():
-    if_pred = input("Predicting HLA class I typing from next-generation sequencing data: (y/n)?")
+    if_pred = input("Predicting HLA class I types from next-generation sequencing data: (y/n)?")
     if if_pred == 'y':
         utils.create_dirs(utils.temp_file + '/hla')
         # MHC Ⅰ:Optitype  预测HLA分型
@@ -100,7 +100,7 @@ def handle08_HLA_I_pred():
 
 
 def handle08_HLA_II_pred():
-    if_pred = input("Predicting HLA class II typing from next-generation sequencing data: (y/n)?")
+    if_pred = input("Predicting HLA class II types from next-generation sequencing data: (y/n)?")
     if if_pred == 'y':
         # MHC Ⅱ:HLAminer
         # 1. bwa比对  2. 分型
