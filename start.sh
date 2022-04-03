@@ -10,4 +10,5 @@ tar -zxvf software.tar.gz
 tar -zxvf test.tar.gz
 rm -f *.gz
 mv rna test/
-mv dbsnp_146.hg38.vcf reference_files/
+mv dbsnp_146/dbsnp_146.hg38.vcf reference_files/
+mv dbsnp_146/dbsnp_146.hg38.vcf.idx reference_files/
