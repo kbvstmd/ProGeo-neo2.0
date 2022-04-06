@@ -11,8 +11,8 @@ from neoantigen_utils import NeoantigenUtils
 
 
 def handle01_create_db():
-    command = ["cp reference_file/crap.fasta " + utils.out_file + "/",
-               "cp reference_file/reuniprot.fasta " + utils.out_file + '/',
+    command = ["cp reference_files/crap.fasta " + utils.out_file + "/",
+               "cp reference_files/reuniprot.fasta " + utils.out_file + '/',
                "cat " + utils.out_file + "/*fasta > software/ref+var+pep.fasta"]
     utils.run_command(command)
 

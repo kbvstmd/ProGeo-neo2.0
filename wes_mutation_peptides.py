@@ -12,7 +12,7 @@ from neoantigen_utils import NeoantigenUtils
 
 
 def handle01_bwa():
-    command = ['bwa index reference_file/hg38/hg38.fa']
+    command = ['bwa index reference_files/hg38/hg38.fa']
     utils.run_command(command)
 
 
@@ -24,9 +24,9 @@ def handle02_sam(dir_tumor, dir_normal):
     normal_files = os.listdir(dir_normal)
     if len(tumor_files) == 2 and len(normal_files) == 2:
         command = [
-            r"bwa mem -t 4 -M -q -5 -R '@RG\tID:foo\tSM:bar\tLB:library1' reference_file/hg38/hg38.fa " + dir_tumor + "/" +
+            r"bwa mem -t 4 -M -q -5 -R '@RG\tID:foo\tSM:bar\tLB:library1' reference_files/hg38/hg38.fa " + dir_tumor + "/" +
             tumor_files[0] + " " + dir_tumor + "/" + tumor_files[1] + " > " + utils.temp_file + "/Tumor-sample.sam",
-            r"bwa mem -t 24 -M -q -5 -R '@RG\tID:foo\tSM:bar\tLB:library1' reference_file/hg38/hg38.fa " + dir_normal + "/" +
+            r"bwa mem -t 24 -M -q -5 -R '@RG\tID:foo\tSM:bar\tLB:library1' reference_files/hg38/hg38.fa " + dir_normal + "/" +
             normal_files[0] + " " + dir_normal + "/" + normal_files[1] + " > " + utils.temp_file + "/Adjacengt-sample.sam"]
         utils.run_command(command)
     else:
@@ -58,22 +58,22 @@ def handle05_add_head():
 
 def handle06_recalibrate_bases():
     command = [
-        "gatk BaseRecalibrator -I " + utils.temp_file + "/Tumor_sorted_markedup_Add.bam  -R  " + current_path + "/reference_file/hg38/hg38.fa  --known-sites reference_file/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/Tumor_recal_data-sample.table",
-        "gatk BaseRecalibrator -I " + utils.temp_file + "/Adjacengt_sorted_markedup_Add.bam  -R  " + current_path + "/reference_file/hg38/hg38.fa  --known-sites reference_file/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/Adjacengt_recal_data-sample.table"]
+        "gatk BaseRecalibrator -I " + utils.temp_file + "/Tumor_sorted_markedup_Add.bam  -R  " + current_path + "/reference_files/hg38/hg38.fa  --known-sites reference_file/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/Tumor_recal_data-sample.table",
+        "gatk BaseRecalibrator -I " + utils.temp_file + "/Adjacengt_sorted_markedup_Add.bam  -R  " + current_path + "/reference_files/hg38/hg38.fa  --known-sites reference_file/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/Adjacengt_recal_data-sample.table"]
     utils.run_command(command)
 
 
 def handle07_ApplyBQSR():
     command = [
-        "gatk ApplyBQSR -R reference_file/hg38/hg38.fa -I " + utils.temp_file + "/Tumor_sorted_markedup_Add.bam  --bqsr-recal-file  " + utils.temp_file + "/Tumor_recal_data-sample.table -O  " + utils.temp_file + "/Tumor_recal-sample.bam",
-        "gatk ApplyBQSR -R reference_file/hg38/hg38.fa -I " + utils.temp_file + "/Adjacengt_sorted_markedup_Add.bam  --bqsr-recal-file  " + utils.temp_file + "/Adjacengt_recal_data-sample.table -O  " + utils.temp_file + "/Adjacengt_recal-sample.bam"]
+        "gatk ApplyBQSR -R reference_files/hg38/hg38.fa -I " + utils.temp_file + "/Tumor_sorted_markedup_Add.bam  --bqsr-recal-file  " + utils.temp_file + "/Tumor_recal_data-sample.table -O  " + utils.temp_file + "/Tumor_recal-sample.bam",
+        "gatk ApplyBQSR -R reference_files/hg38/hg38.fa -I " + utils.temp_file + "/Adjacengt_sorted_markedup_Add.bam  --bqsr-recal-file  " + utils.temp_file + "/Adjacengt_recal_data-sample.table -O  " + utils.temp_file + "/Adjacengt_recal-sample.bam"]
     utils.run_command(command)
 
 
 def handle08_somatic():
     command = [
-        "nohup gatk Mutect2 -R reference_file/hg38/hg38.fa -I " + utils.temp_file + "/Adjacengt_recal-sample.bam -O " + utils.temp_file + "/Adjacengt_normal.vcf &",
-        "nohup gatk Mutect2 -R reference_file/hg38/hg38.fa -I " + utils.temp_file + "/Tumor_recal-sample.bam -I " + utils.temp_file + "/Adjacengt_recal-sample.bam -tumor cancer -normal normal -pon " + utils.temp_file + "/Adjacengt_normal.vcf -O " + utils.temp_file + "/1_somatic_m2.vcf.gz -bamout " + utils.temp_file + "/2_tumor_normal_m2.bam &"]
+        "nohup gatk Mutect2 -R reference_files/hg38/hg38.fa -I " + utils.temp_file + "/Adjacengt_recal-sample.bam -O " + utils.temp_file + "/Adjacengt_normal.vcf &",
+        "nohup gatk Mutect2 -R reference_files/hg38/hg38.fa -I " + utils.temp_file + "/Tumor_recal-sample.bam -I " + utils.temp_file + "/Adjacengt_recal-sample.bam -tumor cancer -normal normal -pon " + utils.temp_file + "/Adjacengt_normal.vcf -O " + utils.temp_file + "/1_somatic_m2.vcf.gz -bamout " + utils.temp_file + "/2_tumor_normal_m2.bam &"]
     utils.run_command(command)
 
 
@@ -82,7 +82,7 @@ def handle09_gatk():
     gatk FilterMutectCalls+vcftools（vcf）
     """
     command = [
-        "gatk FilterMutectCalls -V " + utils.temp_file + "/1_somatic_m2.vcf.gz -R reference_file/hg38/hg38.fa -O " + utils.temp_file + "/somatic_m2.Filtered.vcf"]
+        "gatk FilterMutectCalls -V " + utils.temp_file + "/1_somatic_m2.vcf.gz -R reference_files/hg38/hg38.fa -O " + utils.temp_file + "/somatic_m2.Filtered.vcf"]
     utils.run_command(command)
 
 

@@ -13,8 +13,8 @@ import sys
 
 def handle01_bwa():
     if len(tumor_files) == 2:
-        command = [r"bwa index reference_file/hg38/hg38.fa",
-                   r"bwa mem -t 8 -M -q -5 -R '@RG\tID:foo\tSM:bar\tLB:library1' reference_file/hg38/hg38.fa " + dir_tumor + "/" +
+        command = [r"bwa index reference_files/hg38/hg38.fa",
+                   r"bwa mem -t 8 -M -q -5 -R '@RG\tID:foo\tSM:bar\tLB:library1' reference_files/hg38/hg38.fa " + dir_tumor + "/" +
                    tumor_files[0] + " " + dir_tumor + "/" + tumor_files[1] + " > " + utils.temp_file + "/sample.sam"]
         utils.run_command(command)
     else:
@@ -34,8 +34,8 @@ def handle03_gatk():
     command = [
         "gatk MarkDuplicates -I " + utils.temp_file + "/sorted_sample.bam -O " + utils.temp_file + "/sorted_markedup.bam -M " + utils.temp_file + "/sorted_markedup_metric.bam",
         "gatk AddOrReplaceReadGroups -I  " + utils.temp_file + "/sorted_markedup.bam -O  " + utils.temp_file + "/sorted_markedup_Add.bam -ID 4 -LB lib1 -PL illumina -PU unit1 -SM Cancer",
-        "gatk BaseRecalibrator -I " + utils.temp_file + "/sorted_markedup_Add.bam  -R  reference_file/hg38/hg38.fa  --known-sites reference_file/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/recal_data-sample.table",
-        "gatk ApplyBQSR -R reference_file/hg38/hg38.fa -I  " + utils.temp_file + "/sorted_markedup_Add.bam --bqsr-recal-file  " + utils.temp_file + "/recal_data-sample.table -O  " + utils.temp_file + "/recal-sample.bam"
+        "gatk BaseRecalibrator -I " + utils.temp_file + "/sorted_markedup_Add.bam  -R  reference_files/hg38/hg38.fa  --known-sites reference_files/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/recal_data-sample.table",
+        "gatk ApplyBQSR -R reference_files/hg38/hg38.fa -I  " + utils.temp_file + "/sorted_markedup_Add.bam --bqsr-recal-file  " + utils.temp_file + "/recal_data-sample.table -O  " + utils.temp_file + "/recal-sample.bam"
     ]
     utils.run_command(command)
 
@@ -43,7 +43,7 @@ def handle03_gatk():
 def handle04_sam():
     command = [
         "samtools index " + utils.temp_file + "/recal-sample.bam",
-        "bcftools mpileup -Ou -f reference_file/hg38/hg38.fa " + utils.temp_file + "/recal-sample.bam | bcftools call -vmO z -o " + utils.temp_file + "/sample.vcf.gz",
+        "bcftools mpileup -Ou -f reference_files/hg38/hg38.fa " + utils.temp_file + "/recal-sample.bam | bcftools call -vmO z -o " + utils.temp_file + "/sample.vcf.gz",
         "bcftools tabix -p vcf " + utils.temp_file + "/sample.vcf.gz",
         "bcftools filter -O z -o " + utils.temp_file + "/sample.filtered.vcf.gz -s LOWQUAL -i '%QUAL>20' " + utils.temp_file + "/sample.vcf.gz"
     ]
@@ -72,7 +72,7 @@ def handle07_fusion():
     # 融合新抗原的检测
     utils.create_dirs(utils.temp_file + '/fusion_outdir')
     utils.create_dirs(utils.out_file + '/fusion')
-    command = ["STAR-Fusion --genome_lib_dir reference_file/GRCh38_gencode_v22_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir --left_fq " + dir_tumor + "/" +
+    command = ["STAR-Fusion --genome_lib_dir reference_files/GRCh38_gencode_v22_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir --left_fq " + dir_tumor + "/" +
                tumor_files[0] + " --right_fq " + dir_tumor + "/" + tumor_files[1] + " --examine_coding_effect --FusionInspector inspect --extract_fusion_reads --output_dir " +
                utils.temp_file + "/fusion_outdir"]
     utils.run_command(command)
@@ -115,7 +115,7 @@ def handle09_tpm():
     # 预测TPM
     # 得到的文件存在:outfile-rna/tpm/abundance.tsv
     utils.create_dirs(utils.out_file + '/tpm')
-    command = ["kallisto quant -i reference_file/hg38/h38.cdna.idx -o " + utils.out_file + "/tpm -b 100 " + dir_tumor + "/" + tumor_files[0] + " " + dir_tumor + "/" + tumor_files[1] + " > tpm.out"]
+    command = ["kallisto quant -i reference_files/hg38/h38.cdna.idx -o " + utils.out_file + "/tpm -b 100 " + dir_tumor + "/" + tumor_files[0] + " " + dir_tumor + "/" + tumor_files[1] + " > tpm.out"]
     utils.run_command(command)
 
 

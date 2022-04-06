@@ -33,7 +33,7 @@ class NeoantigenUtils:
     @staticmethod
     def read_fasta():
         # 读取参考序列文件
-        reuni_df0 = pd.read_csv("reference_file/reuniprot.fasta", sep='\t', header=None,
+        reuni_df0 = pd.read_csv("reference_files/reuniprot.fasta", sep='\t', header=None,
                                 names=['gene', 'gene2', 'sequence'])
         reuni_df1 = reuni_df0[['gene', 'sequence']]
         reuni_df2 = reuni_df0[['gene2', 'sequence']]

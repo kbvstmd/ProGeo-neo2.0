@@ -19,7 +19,7 @@ def handle01_tpm_filter():
     for hla_class in range(1, 3):
         mut_type = mut_types if hla_class == 1 else mut_types[:-1]
         hla = 'I' if hla_class == 1 else 'II'
-        input1 = pd.read_table("reference_file/Tran_id_gene.txt", names=['gene', 'EM'], sep=',')
+        input1 = pd.read_table("reference_files/Tran_id_gene.txt", names=['gene', 'EM'], sep=',')
         input1.dropna(axis=0, how='any', inplace=True)
         em_dic = dict(zip(input1['EM'], input1['gene']))
         input2 = pd.read_table(utils.temp_file + "/tpm/abundance.tsv", sep='\t')
