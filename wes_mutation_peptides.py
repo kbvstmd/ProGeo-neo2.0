@@ -72,8 +72,8 @@ def handle07_ApplyBQSR():
 
 def handle08_somatic():
     command = [
-        "nohup gatk Mutect2 -R reference_files/hg38/hg38.fa -I " + utils.temp_file + "/Adjacengt_recal-sample.bam -O " + utils.temp_file + "/Adjacengt_normal.vcf &",
-        "nohup gatk Mutect2 -R reference_files/hg38/hg38.fa -I " + utils.temp_file + "/Tumor_recal-sample.bam -I " + utils.temp_file + "/Adjacengt_recal-sample.bam -tumor cancer -normal normal -pon " + utils.temp_file + "/Adjacengt_normal.vcf -O " + utils.temp_file + "/1_somatic_m2.vcf.gz -bamout " + utils.temp_file + "/2_tumor_normal_m2.bam &"]
+        "gatk Mutect2 -R reference_files/hg38/hg38.fa -I " + utils.temp_file + "/Adjacengt_recal-sample.bam -O " + utils.temp_file + "/Adjacengt_normal.vcf",
+        "gatk Mutect2 -R reference_files/hg38/hg38.fa -I " + utils.temp_file + "/Tumor_recal-sample.bam -I " + utils.temp_file + "/Adjacengt_recal-sample.bam -tumor cancer -normal normal -pon " + utils.temp_file + "/Adjacengt_normal.vcf -O " + utils.temp_file + "/1_somatic_m2.vcf.gz -bamout " + utils.temp_file + "/2_tumor_normal_m2.bam"]
     utils.run_command(command)
 
 
