@@ -58,8 +58,8 @@ def handle05_add_head():
 
 def handle06_recalibrate_bases():
     command = [
-        "gatk BaseRecalibrator -I " + utils.temp_file + "/Tumor_sorted_markedup_Add.bam  -R  " + current_path + "/reference_files/hg38/hg38.fa  --known-sites reference_file/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/Tumor_recal_data-sample.table",
-        "gatk BaseRecalibrator -I " + utils.temp_file + "/Adjacengt_sorted_markedup_Add.bam  -R  " + current_path + "/reference_files/hg38/hg38.fa  --known-sites reference_file/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/Adjacengt_recal_data-sample.table"]
+        "gatk BaseRecalibrator -I " + utils.temp_file + "/Tumor_sorted_markedup_Add.bam  -R  " + current_path + "/reference_files/hg38/hg38.fa  --known-sites reference_files/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/Tumor_recal_data-sample.table",
+        "gatk BaseRecalibrator -I " + utils.temp_file + "/Adjacengt_sorted_markedup_Add.bam  -R  " + current_path + "/reference_files/hg38/hg38.fa  --known-sites reference_files/dbsnp_146.hg38.vcf -O " + utils.temp_file + "/Adjacengt_recal_data-sample.table"]
     utils.run_command(command)
 
 
