@@ -125,7 +125,7 @@ if __name__ == '__main__':
     tumor_files = os.listdir(dir_tumor)
     utils = NeoantigenUtils("outfile2", "outfile-rna")
     # current_path = os.path.abspath(os.path.dirname(__file__))
-    # print(current_path)
+    utils.create_dirs(utils.temp_file)
     utils.create_dirs(utils.out_file)
     dir_list = ['/txt_files', '/fasta_files', '/csv_files']
     for d in dir_list:
