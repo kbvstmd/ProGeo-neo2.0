@@ -140,7 +140,7 @@ if __name__ == '__main__':
     # 读取样本文件
     sample = pd.read_table(utils.out_file + '/rna_annovar_out.hg38_multianno.txt', sep="\t")
     sample = sample[sample["Otherinfo10"].str.contains("PASS")]
-    handle06_var_seq()
+    handle06_var_seq(sample, reuniprot)
     handle07_fusion()
     handle08_HLA_I_pred()
     handle08_HLA_II_pred()
