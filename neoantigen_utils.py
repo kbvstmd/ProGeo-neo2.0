@@ -195,15 +195,18 @@ class NeoantigenUtils:
         merge_snv_df = pd.merge(result_df, reuniprot, how='inner', left_on='gene', right_on='gene')
         # 在突变位点替换氨基酸
         alt_snv_df = merge_snv_df.copy()
-        alt_snv_df['alt_seq'] = alt_snv_df[['sequence', 'protein']].apply(
-            lambda row: self.alter_seq(row['sequence'], row['protein']), axis=1)
-        alt_snv_df = alt_snv_df[~alt_snv_df['alt_seq'].isin([''])]  # 删除空al_seq的行
-        alt_snv_df['pos'] = alt_snv_df['protein'].apply(lambda p: int(p[1:-1]))
-        alt_snv_df['AAc'] = alt_snv_df['protein'].apply(lambda p: p[0] + p[-1])
-        alt_snv_df.to_csv(self.out_file + '/csv_files/alt_' + tag + '.csv', index=False)
-        if sub_pep == 'y':
-            self.peps_save(alt_snv_df, 'snv')
-            print("snv MHC files have been saved.")
+        if not alt_snv_df.empty:
+            alt_snv_df['alt_seq'] = alt_snv_df[['sequence', 'protein']].apply(
+                lambda row: self.alter_seq(row['sequence'], row['protein']), axis=1)
+            alt_snv_df = alt_snv_df[~alt_snv_df['alt_seq'].isin([''])]  # 删除空al_seq的行
+            alt_snv_df['pos'] = alt_snv_df['protein'].apply(lambda p: int(p[1:-1]))
+            alt_snv_df['AAc'] = alt_snv_df['protein'].apply(lambda p: p[0] + p[-1])
+            alt_snv_df.to_csv(self.out_file + '/csv_files/alt_' + tag + '.csv', index=False)
+            if sub_pep == 'y':
+                self.peps_save(alt_snv_df, 'snv')
+                print("snv MHC files have been saved.")
+        else:
+            print("There is no nonsynonymous SNV!")
 
     def handle2(self, sample, reuniprot, sub_pep='y'):  # DEL,缺失
         tag = 'del'
@@ -219,15 +222,18 @@ class NeoantigenUtils:
         merge_del_df = pd.merge(result_df, reuniprot, how='inner', left_on='gene', right_on='gene')
         # 在突变位点替换氨基酸
         alt_del_df = merge_del_df.copy()
-        alt_del_df['alt_seq'] = alt_del_df[['sequence', 'protein']].apply(
-            lambda row: self.alter_seq_del(row['sequence'], row['protein']), axis=1)
-        alt_del_df = alt_del_df[~alt_del_df['alt_seq'].isin([''])]
-        alt_del_df['pos'] = alt_del_df['protein'].apply(lambda p: int(p.split('_')[0][1:]))
-        alt_del_df['AAc'] = alt_del_df.apply(lambda row: self.get_aac(row['protein'], row['alt_seq']), axis=1)
-        alt_del_df.to_csv(self.out_file + '/csv_files/alt_' + tag + '.csv', index=False)
-        if sub_pep == 'y':
-            self.peps_save(alt_del_df, 'del')
-            print("deletion MHC files have been saved.")
+        if not alt_del_df.empty:
+            alt_del_df['alt_seq'] = alt_del_df[['sequence', 'protein']].apply(
+                lambda row: self.alter_seq_del(row['sequence'], row['protein']), axis=1)
+            alt_del_df = alt_del_df[~alt_del_df['alt_seq'].isin([''])]
+            alt_del_df['pos'] = alt_del_df['protein'].apply(lambda p: int(p.split('_')[0][1:]))
+            alt_del_df['AAc'] = alt_del_df.apply(lambda row: self.get_aac(row['protein'], row['alt_seq']), axis=1)
+            alt_del_df.to_csv(self.out_file + '/csv_files/alt_' + tag + '.csv', index=False)
+            if sub_pep == 'y':
+                self.peps_save(alt_del_df, 'del')
+                print("deletion MHC files have been saved.")
+        else:
+            print("There is no nonframeshift deletion!")
 
     def handle3(self, sample, reuniprot, sub_pep='y'):  # 缺失插入, delins
         tag = 'ins'
@@ -243,16 +249,19 @@ class NeoantigenUtils:
         merge_delins_df = pd.merge(result_df, reuniprot, how='inner', left_on='gene', right_on='gene')
         # 在突变位点 插入/替换 氨基酸
         alt_ins_df = merge_delins_df.copy()
-        alt_ins_df['alt_seq'] = alt_ins_df[['sequence', 'protein']].apply(
-            lambda row: self.alter_seq_ins(row['sequence'], row['protein']), axis=1)
-        alt_ins_df = alt_ins_df[~alt_ins_df['alt_seq'].isin([''])]
-        alt_ins_df['pos'] = alt_ins_df['protein'].apply(
-            lambda p: int(p.split('delins')[0][1:]) if 'delins' in p else int(p.split('_')[1].split('ins')[0][1:]))
-        alt_ins_df['AAc'] = alt_ins_df.apply(lambda row: self.get_aac_ins(row['protein'], row['alt_seq']), axis=1)
-        alt_ins_df.to_csv(self.out_file + '/csv_files/alt_' + tag + '.csv', index=False)
-        if sub_pep == 'y':
-            self.peps_save(alt_ins_df, 'ins')
-            print("insert MHC files have been saved.")
+        if not alt_ins_df.empty:
+            alt_ins_df['alt_seq'] = alt_ins_df[['sequence', 'protein']].apply(
+                lambda row: self.alter_seq_ins(row['sequence'], row['protein']), axis=1)
+            alt_ins_df = alt_ins_df[~alt_ins_df['alt_seq'].isin([''])]
+            alt_ins_df['pos'] = alt_ins_df['protein'].apply(
+                lambda p: int(p.split('delins')[0][1:]) if 'delins' in p else int(p.split('_')[1].split('ins')[0][1:]))
+            alt_ins_df['AAc'] = alt_ins_df.apply(lambda row: self.get_aac_ins(row['protein'], row['alt_seq']), axis=1)
+            alt_ins_df.to_csv(self.out_file + '/csv_files/alt_' + tag + '.csv', index=False)
+            if sub_pep == 'y':
+                self.peps_save(alt_ins_df, 'ins')
+                print("insert MHC files have been saved.")
+        else:
+            print("There is no nonframeshift insertion!")
 
     def handle4(self, sample, reuniprot, sub_pep='y'):  # 移码突变, fs
         tag = 'fs'
@@ -273,15 +282,18 @@ class NeoantigenUtils:
         merge_fs_df = pd.merge(result_df1, reuniprot, how='inner', left_on='gene', right_on='gene')
         # 在突变位点替换氨基酸信息
         alt_fs_df = merge_fs_df.copy()
-        alt_fs_df['alt_seq'] = alt_fs_df[['sequence', 'protein']].apply(
-            lambda row: self.alter_seq(row['sequence'], row['protein']), axis=1)
-        alt_fs_df = alt_fs_df[~alt_fs_df['alt_seq'].isin([''])]  # 删除空al_seq的行
-        alt_fs_df['pos'] = alt_fs_df['protein'].apply(lambda p: int(p[1:-1]))
-        alt_fs_df['AAc'] = alt_fs_df['protein'].apply(lambda p: p[0] + p[-1])
-        alt_fs_df.to_csv(self.out_file + '/csv_files/alt_' + tag + '.csv', index=False)
-        if sub_pep == 'y':
-            self.peps_save(alt_fs_df, 'fs')
-            print("fs MHC files have been saved.")
+        if not alt_fs_df.empty:
+            alt_fs_df['alt_seq'] = alt_fs_df[['sequence', 'protein']].apply(
+                lambda row: self.alter_seq(row['sequence'], row['protein']), axis=1)
+            alt_fs_df = alt_fs_df[~alt_fs_df['alt_seq'].isin([''])]  # 删除空al_seq的行
+            alt_fs_df['pos'] = alt_fs_df['protein'].apply(lambda p: int(p[1:-1]))
+            alt_fs_df['AAc'] = alt_fs_df['protein'].apply(lambda p: p[0] + p[-1])
+            alt_fs_df.to_csv(self.out_file + '/csv_files/alt_' + tag + '.csv', index=False)
+            if sub_pep == 'y':
+                self.peps_save(alt_fs_df, 'fs')
+                print("fs MHC files have been saved.")
+        else:
+            print("There is no frameshift deletion/insertion!")
 
     def save_var_pro(self):  # 保存突变的长肽序列
         alt_df = pd.DataFrame()
