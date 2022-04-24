@@ -83,7 +83,7 @@ def netmhc_filter(input1, hla_class=1):
             'MHC': 'HLA',
             'Identity': 'gene'
         })
-        select_col = ['HLA', 'gene', 'Peptide', 'Aff(nM)', '%Rank_BA', 'BindLevel']
+        select_col = ['HLA', 'gene', 'Peptide', 'Aff(nM)', '%Rank_EL', 'BindLevel']
     else:  # 判断突变信息
         out_df['judge'] = out_df.apply(lambda row: mutant_judge(row['Peptide'], row['Identity'], split_ch), axis=1)
         output1 = out_df[out_df['judge'] == 1].copy()
@@ -94,7 +94,7 @@ def netmhc_filter(input1, hla_class=1):
             lambda row: 0 if int(row['Pos']) > row['mut_pos'] else 1, axis=1)
         output1 = output1[output1['judge_pos'] == 1]
         output1.rename(columns={'MHC': 'HLA'}, inplace=True)
-        select_col = ['HLA', 'gene', 'Peptide', 'AAchange', 'mut_pos', 'Aff(nM)', '%Rank_BA', 'BindLevel']
+        select_col = ['HLA', 'gene', 'Peptide', 'AAchange', 'mut_pos', 'Aff(nM)', '%Rank_EL', 'BindLevel']
     out = output1[select_col].copy()
     out.drop_duplicates(inplace=True)
     return out
