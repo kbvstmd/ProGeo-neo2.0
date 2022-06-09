@@ -104,12 +104,14 @@ class NeoantigenUtils:
             pos = int(str_list[0][1:])
             rep = str_list[1]
             return '' if pos > len(seq) or seq[pos - 1] != a1 else seq[:pos - 1] + rep + seq[pos:]
-        else:
+        elif 'ins' in protein:
             str_list = protein.split('ins')
             ins = str_list[1]
             alt_bef = protein[0]
             pos = int(str_list[0].split('_')[0][1:])
             return '' if pos > len(seq) or seq[pos - 1] != alt_bef else seq[:pos] + ins + seq[pos:]
+        else:
+            return ''
 
     @staticmethod
     def get_aac(protein, seq):
