@@ -58,3 +58,6 @@ python neoantigen_filtration.py
 After different levels of strict threshold filtration, the final candidate neoantigens will be saved in the MHC-I and MHC-II directories under the outfile-filter-neoantigens directory.
 
 For detailed software installation and usage of ProGeo-neo2.0, please read the User's Manual.
+
+### 3.6. Cite
+Liu, C.; Zhang, Y.; Jian, X.; Tan, X.; Lu, M.; Ouyang, J.; Liu, Z.; Li, Y.; Xu, L.; Chen, L.; Lin, Y.; Xie, L. ProGeo-Neo v2.0: A One-Stop Software for Neoantigen Prediction and Filtering Based on the Proteogenomics Strategy. Genes 2022, 13, 783.
