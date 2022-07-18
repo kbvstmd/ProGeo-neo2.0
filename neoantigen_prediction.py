@@ -14,10 +14,10 @@ def neo_pred_I():
     command = []
     for tag in tags[:-1]:
         command.append(
-            "netMHCpan -f outfile-wes/fasta_files/" + tag + "_MHC_1.fasta -a " + hla_allele1 + " -s -BA > " + utils.temp_file + "/MHC-I/" + tag + "/" + tag + "_1.out &")
+            "netMHCpan -f outfile-wes/fasta_files/" + tag + "_MHC_1.fasta -a " + hla_allele1 + " -s -BA > " + utils.temp_file + "/MHC-I/" + tag + "/" + tag + "_1.out")
     # fusion:
     command.append(
-        "netMHCpan -f outfile-rna/fusion/fusion-pep.fasta -a " + hla_allele1 + " -s -BA > " + utils.temp_file + "/MHC-I/fusion/fusion_1.out &")
+        "netMHCpan -f outfile-rna/fusion/fusion-pep.fasta -a " + hla_allele1 + " -s -BA > " + utils.temp_file + "/MHC-I/fusion/fusion_1.out")
     utils.run_command(command, False)
 
 
@@ -32,7 +32,7 @@ def neo_pred_II():
     for tag in tags:
         for i in range(15, 31):
             command.append(
-                "netMHCIIpan -f outfile-wes/fasta_files/" + tag + "_MHC_2_" + str(i) + ".fasta -a " + hla_allele2 + " -BA -s -length " + str(i) + " > " + utils.temp_file + "/MHC-II/" + tag + "/" + tag + "_2_" + str(i) + "_fasta.out &")
+                "netMHCIIpan -f outfile-wes/fasta_files/" + tag + "_MHC_2_" + str(i) + ".fasta -a " + hla_allele2 + " -BA -s -length " + str(i) + " > " + utils.temp_file + "/MHC-II/" + tag + "/" + tag + "_2_" + str(i) + "_fasta.out")
     utils.run_command(command, False)
 
 
